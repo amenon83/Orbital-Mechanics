@@ -1,99 +1,204 @@
-# Orbital Mechanics Simulation Project
+# Orbital Mechanics Library
 
-This project simulates two scenarios based on the restricted three-body problem: the motion of a test particle near the L4 Lagrange point of the Sun-Earth system and the formation of the Cassini Division in Saturn's rings due to resonance with the moon Mimas. Both simulations utilize C++ for the core physics calculations and Python for visualization.
+A modern, high-performance C++ library for orbital mechanics simulations, featuring the Circular Restricted Three-Body Problem (CR3BP) with applications to Lagrange point dynamics and ring system evolution.
 
-## Overview
+## Features
 
-The project consists of two main parts:
+- **Modern C++17** design with header-only architecture
+- **Multiple numerical integrators** (Euler, RK4, Verlet) with accuracy and performance trade-offs
+- **Circular Restricted Three-Body Problem** solver with built-in Sun-Earth and Saturn-Mimas systems
+- **Comprehensive testing** with Google Test framework
+- **Flexible I/O** supporting text, CSV, and HDF5 output formats
+- **CMake build system** with cross-platform support
+- **Extensive documentation** with Doxygen API docs and examples
 
-1.  **L4 Lagrange Point Simulation:**
-    * Simulates the motion of a massless test particle in the vicinity of the L4 Lagrange point within the rotating reference frame defined by the Sun ($M_1$) and the Earth ($M_2$).
-    * Calculates the particle's trajectory by considering the gravitational forces from the Sun and Earth, as well as the centrifugal and Coriolis forces arising from the rotating frame.
-    * The simulation outputs the particle's position over time to `L4_output.txt`.
-    * A Python script visualizes the results, showing the overall system, a zoomed-in view of the particle's path, and a static plot of the complete trajectory.
+## Quick Start
 
-2.  **Cassini Division Simulation:**
-    * Simulates the dynamics of numerous test particles initially placed in circular orbits between Saturn ($M_1$) and its moon Mimas ($M_2$).
-    * Demonstrates how the 2:1 orbital resonance with Mimas clears a gap in the particle distribution over time, forming the Cassini Division.
-    * Similar to the L4 simulation, this part calculates the gravitational, centrifugal, and Coriolis forces for each particle in the rotating reference frame defined by Saturn and Mimas.
-    * The simulation outputs particle positions to `cassini_output.txt`.
-    * A Python script animates the particle distribution, showing the gradual formation of the gap over many Mimas orbits.
+### Prerequisites
 
-## Theoretical Background: The Restricted Three-Body Problem
+- C++17 compatible compiler (GCC 7+, Clang 6+, MSVC 2017+)
+- CMake 3.16+
+- Git
 
-Both simulations are based on the **Restricted Three-Body Problem**. This problem considers the motion of a body with negligible mass ($m$) under the gravitational influence of two massive bodies ($M_1$ and $M_2$) that revolve in circles around their common center of mass. We analyze the motion in a reference frame that rotates with the same angular velocity ($\omega$) as the two massive bodies, keeping them stationary in this frame.
+### Building
 
-### Key Equations
+```bash
+git clone <repository-url>
+cd Orbital-Mechanics
+mkdir build && cd build
+cmake ..
+make -j4
+```
 
-1.  **Angular Velocity ($\omega$):** The angular velocity of the rotating frame (and the $M_1$-$M_2$ system) is given by Kepler's Third Law:
-    $$ \omega^2 = \frac{G(M_1 + M_2)}{a^3} $$
-    where $G$ is the gravitational constant and $a$ is the constant separation distance between $M_1$ and $M_2$.
+### Running Examples
 
-2.  **Coordinates in Rotating Frame:** We place the origin at the center of mass and the x-axis along the line connecting $M_1$ and $M_2$. Their coordinates are:
-    * $M_1$: $x_1 = -a \frac{M_2}{M_1 + M_2}$
-    * $M_2$: $x_2 = a \frac{M_1}{M_1 + M_2}$
+```bash
+# Lagrange point simulation
+./src/lagrange_simulation
 
-3.  **Equation of Motion:** The acceleration of the test particle $m$ at position $\vec{r} = (x, y)$ in the rotating frame is given by the vector equation:
-    $$ \frac{d^2\vec{r}}{dt^2} = \frac{\vec{F}_1}{m} + \frac{\vec{F}_2}{m} - \vec{\omega} \times (\vec{\omega} \times \vec{r}) - 2\vec{\omega} \times \frac{d\vec{r}}{dt} $$
-    where:
-    * $\vec{F}_1$, $\vec{F}_2$ are the gravitational forces from $M_1$ and $M_2$, respectively.
-    * $- \vec{\omega} \times (\vec{\omega} \times \vec{r})$ is the centrifugal acceleration.
-    * $- 2\vec{\omega} \times \frac{d\vec{r}}{dt}$ is the Coriolis acceleration.
+# Cassini division simulation
+./src/cassini_simulation
 
-4.  **Component Form:** Writing the equation of motion in terms of $x$ and $y$ components yields:
-    $$ \ddot{x} = -\frac{G M_1 (x - x_1)}{r_1^3} - \frac{G M_2 (x - x_2)}{r_2^3} + \omega^2 x + 2\omega \dot{y} $$
-    $$ \ddot{y} = -\frac{G M_1 y}{r_1^3} - \frac{G M_2 y}{r_2^3} + \omega^2 y - 2\omega \dot{x} $$
-    where:
-    * $r_1 = \sqrt{(x - x_1)^2 + y^2}$ is the distance from $m$ to $M_1$.
-    * $r_2 = \sqrt{(x - x_2)^2 + y^2}$ is the distance from $m$ to $M_2$.
-    * $(\dot{x}, \dot{y})$ is the velocity and $(\ddot{x}, \ddot{y})$ is the acceleration in the rotating frame.
-    * The $\omega^2 x$ and $\omega^2 y$ terms represent the centrifugal acceleration components.
-    * The $2\omega \dot{y}$ and $-2\omega \dot{x}$ terms represent the Coriolis acceleration components.
+# Simple example
+./examples/simple_example
 
-These equations are numerically integrated in the C++ scripts to simulate the particle trajectories.
+# Performance comparison
+./examples/performance_comparison
+```
 
-## Project Files
+### Running Tests
 
-* `lagrange_point.cpp`: C++ source code for the L4 simulation. Outputs `L4_output.txt`.
-* `l4_visualization.py`: Python script to visualize the L4 simulation results from `L4_output.txt`.
-* `cassini_division.cpp`: C++ source code for the Cassini Division simulation. Outputs `cassini_output.txt`.
-* `cassini_visualization.py`: Python script to visualize the Cassini Division simulation results from `cassini_output.txt`.
+```bash
+# Run all tests
+make test
 
-## Usage Instructions
+# Or run directly
+./tests/orbital_mechanics_tests
+```
 
-These instructions assume you have a C++ compiler (like g++) and Python (with necessary libraries like Matplotlib and NumPy) installed.
+## Library Usage
 
-1.  **Compile C++ Code:**
-    Open a terminal or command prompt in the project directory.
-    * For the L4 simulation:
-        ```bash
-        g++ lagrange_point.cpp -o lagrange_point
-        ```
-    * For the Cassini simulation:
-        ```bash
-        g++ cassini_division.cpp -o cassini_division
-        ```
+### Basic Example
 
-2.  **Run C++ Simulations:**
-    * Execute the compiled L4 simulation:
-        ```bash
-        ./lagrange_point
-        ```
-        This will generate the `L4_output.txt` file.
-    * Execute the compiled Cassini simulation:
-        ```bash
-        ./cassini_division
-        ```
-        This will generate the `cassini_output.txt` file.
+```cpp
+#include <orbital_mechanics/orbital_mechanics.hpp>
+using namespace orbital_mechanics;
 
-3.  **Run Python Visualizations:**
-    * Visualize the L4 results:
-        ```bash
-        python l4_visualization.py
-        ```
-    * Visualize the Cassini Division formation:
-        ```bash
-        python cassini_visualization.py
-        ```
+// Create simulation configuration
+simulation::SimulationConfig config;
+config.time_step = 3600.0;  // 1 hour
+config.total_time = 365.25 * 24 * 3600;  // 1 year
+config.integrator_type = "rk4";
+config.output_filename = "output.txt";
 
-This should open animation windows displaying the results of the simulations. Ensure the Python scripts have read permissions for the respective `.txt` output files.
+// Create simulation
+simulation::Simulation sim(config);
+
+// Set up Sun-Earth system
+auto solver = std::make_unique<physics::CR3BPSolver>(
+    physics::systems::sun_earth());
+sim.set_physics_solver(std::move(solver));
+
+// Add bodies and run
+sim.add_body(/* ... */);
+sim.run();
+```
+
+### Advanced Usage
+
+```cpp
+// Custom integrator comparison
+auto rk4 = integrators::create_integrator("rk4");
+auto verlet = integrators::create_integrator("verlet");
+
+// Custom derivative function
+auto derivative_func = [](const integrators::State& state, 
+                         double mass, double time, void* user_data) {
+    return integrators::Derivative(state.velocity, calculate_acceleration(state));
+};
+
+// Multiple output formats
+auto writer = io::create_data_writer("csv", true);  // Include velocities
+```
+
+## Applications
+
+### 1. Lagrange Point Dynamics
+
+Simulates test particle motion near the L4 Lagrange point of the Sun-Earth system, demonstrating:
+- Quasi-stable orbital dynamics
+- Tadpole and horseshoe orbits
+- Effects of perturbations on equilibrium points
+
+### 2. Cassini Division Formation
+
+Models the clearing of Saturn's rings due to gravitational resonance with Mimas:
+- 2:1 orbital resonance effects
+- Particle ejection dynamics
+- Ring gap formation over time
+
+## Architecture
+
+The library follows a modular design with clear separation of concerns:
+
+```
+orbital_mechanics/
+├── core/           # Basic data structures (Vector2, Body, Constants)
+├── integrators/    # Numerical integration schemes
+├── physics/        # Physics calculations (CR3BP solver)
+├── io/            # Data input/output handling
+└── simulation/    # High-level simulation framework
+```
+
+## Performance
+
+- **Optimized for speed**: Modern C++ with compiler optimizations
+- **Memory efficient**: Header-only design with minimal allocations
+- **Scalable**: Support for thousands of particles in ring simulations
+- **Accurate**: 4th-order Runge-Kutta integration with configurable time steps
+
+## Configuration Options
+
+### CMake Options
+
+```bash
+cmake -DBUILD_TESTS=ON \
+      -DBUILD_EXAMPLES=ON \
+      -DUSE_OPENMP=ON \
+      -DUSE_HDF5=ON \
+      ..
+```
+
+### Simulation Parameters
+
+- **Time step**: Balance between accuracy and performance
+- **Integrator type**: euler, rk4, verlet
+- **Output format**: text, csv, hdf5
+- **Output frequency**: Control data volume
+
+## Testing
+
+The library includes comprehensive tests covering:
+
+- **Unit tests** for all major components
+- **Integration tests** for complete simulations
+- **Performance benchmarks** comparing integrators
+- **Physics validation** with known analytical solutions
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Add tests for new functionality
+4. Ensure all tests pass
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Citation
+
+If you use this library in academic work, please cite:
+
+```bibtex
+@software{orbital_mechanics_library,
+  author = {Arnav Menon},
+  title = {Orbital Mechanics Library: Modern C++ Framework for Three-Body Dynamics},
+  year = {2024},
+  version = {1.0.0},
+  url = {https://github.com/username/orbital-mechanics}
+}
+```
+
+## References
+
+1. Szebehely, V. (1967). *Theory of Orbits: The Restricted Problem of Three Bodies*
+2. Murray, C. D., & Dermott, S. F. (1999). *Solar System Dynamics*
+3. Danby, J. M. A. (1992). *Fundamentals of Celestial Mechanics*
+
+## Contact
+
+- Author: Arnav Menon
+- Email: [email@example.com]
+- GitHub: [github.com/username]

@@ -1,0 +1,65 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# Output files
+*.txt
+*.csv
+*.h5
+*.hdf5
+
+# IDE files
+.vscode/
+.idea/
+*.vcxproj*
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Compiled objects
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.a
+*.lib
+
+# Executables
+*.exe
+lagrange_simulation
+cassini_simulation
+simple_example
+performance_comparison
+*_test
+*_tests
+
+# Documentation build
+docs/html/
+docs/latex/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+install_manifest.txt
+
+# Package files
+*.deb
+*.rpm
+*.pkg
+*.dmg
