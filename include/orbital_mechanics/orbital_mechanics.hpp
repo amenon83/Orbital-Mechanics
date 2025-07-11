@@ -32,6 +32,10 @@
 #include "simulation/simulation.hpp"
 #include "simulation/simulation_impl.hpp"
 
+// PINN components
+#include "pinn/fluid_dynamics.hpp"
+#include "pinn/fluid_dynamics_impl.hpp"
+
 /**
  * @namespace orbital_mechanics
  * @brief Main namespace for the orbital mechanics library
